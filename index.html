@@ -65,20 +65,20 @@
 
     <main class="max-w-2xl mx-auto w-full px-4 mt-6 flex-grow">
 
-        <!-- 2. 第1階層：性別タブ (純粋なHTML/JSにリプレイス) -->
+        <!-- 2. 第1階層：性別タブ -->
         <div class="bg-stone-100 p-1.5 rounded-full flex mb-4 shadow-inner">
             <button id="btn-gender-all" onclick="setGender('all')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 bg-white text-amber-900 font-bold shadow">
                 すべて
             </button>
-            <button id="btn-gender-boy" onclick="setGender('boy')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 text-stone-500 hover:text-sky-600 flex items-center justify-center gap-1.5">
+            <button id="btn-gender-boy" onclick="setGender('boy')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 text-stone-500 hover:text-stone-700 hover:text-sky-600 flex items-center justify-center gap-1.5">
                 <i class="fa-solid fa-mars text-xs"></i>男子
             </button>
-            <button id="btn-gender-girl" onclick="setGender('girl')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 text-stone-500 hover:text-rose-400 flex items-center justify-center gap-1.5">
+            <button id="btn-gender-girl" onclick="setGender('girl')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 text-stone-500 hover:text-stone-700 hover:text-rose-400 flex items-center justify-center gap-1.5">
                 <i class="fa-solid fa-venus text-xs"></i>女子
             </button>
         </div>
 
-        <!-- 3. 第2階層：年齢層タブ (スクロール対応・JSで描画) -->
+        <!-- 3. 第2階層：年齢層タブ (スクロール対応) -->
         <div id="age-tabs-container" class="flex gap-2 overflow-x-auto no-scrollbar pb-3 mb-4 border-b border-amber-100/60">
             <!-- JSで動的に年齢層ボタンが生成されます -->
         </div>
@@ -162,7 +162,7 @@
                         <div>
                             <label class="block text-xs font-bold text-stone-500 mb-1.5">アドバイスのテーマ（複数選択できます） <span class="text-red-400">*</span></label>
                             <div id="new-subcategories-list-container" class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto border border-stone-200 rounded-xl p-3 bg-stone-50/50">
-                                <!-- JSでいつ頃のアドバイスか（年齢層）に連動してチェックボックスが動的に生成されます -->
+                                <!-- JSで年齢層に連動してチェックボックスが動的に生成されます -->
                             </div>
                             <p id="checkbox-warning" class="text-[10px] text-rose-500 mt-1 font-medium hidden">※テーマを1つ以上選択してください</p>
                         </div>
@@ -182,7 +182,8 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-stone-500 mb-1">お子さんの現在の状況</label>
-                                <input type="text" id="new-child-status" placeholder="例: 24歳社会人、20歳大学生" class="w-full text-xs border border-stone-200 rounded-xl p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                <!-- ご指定いただいた「例：24歳社会人、20歳長男」にプレースホルダーを変更 -->
+                                <input type="text" id="new-child-status" placeholder="例: 24歳社会人、20歳長男" class="w-full text-xs border border-stone-200 rounded-xl p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
                             </div>
                         </div>
 
@@ -470,8 +471,9 @@
             let html = '';
             list.forEach(cat => {
                 const isSelected = selectedSubCategory === cat.id;
-                const activeClass = "bg-stone-800 text-white font-bold shadow-md px-3.5 py-1.5 text-xs rounded-xl transition-all duration-150 flex items-center gap-1";
-                const inactiveClass = "bg-white text-stone-600 border border-stone-200/70 hover:bg-stone-50 px-3.5 py-1.5 text-xs rounded-xl transition-all duration-150 flex items-center gap-1";
+                // 改行崩れを防ぐため、ボタンのクラスに `whitespace-nowrap` を追加し、テーマ名が途中で不自然にちぎれないよう最適化
+                const activeClass = "bg-stone-800 text-white font-bold shadow-md px-3.5 py-1.5 text-xs rounded-xl transition-all duration-150 flex items-center gap-1 whitespace-nowrap";
+                const inactiveClass = "bg-white text-stone-600 border border-stone-200/70 hover:bg-stone-50 px-3.5 py-1.5 text-xs rounded-xl transition-all duration-150 flex items-center gap-1 whitespace-nowrap";
                 
                 html += `<button onclick="setSubCategory('${cat.id}')" class="${isSelected ? activeClass : inactiveClass}">${cat.name}</button>`;
             });
@@ -551,7 +553,7 @@
                 post.sub_categories.forEach(subCatId => {
                     const subCatName = getSubCategoryName(post.category, subCatId, post.custom_tag);
                     tagsHtml += `
-                        <span class="bg-emerald-50 text-emerald-800 px-2.5 py-0.5 text-[10px] font-bold rounded-md flex items-center gap-0.5">
+                        <span class="bg-emerald-50 text-emerald-800 px-2.5 py-0.5 text-[10px] font-bold rounded-md flex items-center gap-0.5 whitespace-nowrap">
                             <i class="fa-solid fa-hashtag text-[9px] text-emerald-600/70"></i>
                             <span>${subCatName}</span>
                         </span>
@@ -594,10 +596,10 @@
                         ${deleteBtnHtml}
 
                         <div class="flex flex-wrap gap-1.5 mb-3.5 items-center pr-8">
-                            <span class="${post.gender === 'boy' ? 'bg-sky-50 text-sky-600' : (post.gender === 'girl' ? 'bg-rose-50 text-rose-500' : 'bg-stone-100 text-stone-600')} px-2.5 py-0.5 text-[10px] font-bold rounded-md">
+                            <span class="${post.gender === 'boy' ? 'bg-sky-50 text-sky-600' : (post.gender === 'girl' ? 'bg-rose-50 text-rose-500' : 'bg-stone-100 text-stone-600')} px-2.5 py-0.5 text-[10px] font-bold rounded-md whitespace-nowrap">
                                 ${post.gender === 'boy' ? '男子' : (post.gender === 'girl' ? '女子' : '共通・その他')}
                             </span>
-                            <span class="bg-amber-50 text-amber-800 px-2.5 py-0.5 text-[10px] font-bold rounded-md">
+                            <span class="bg-amber-50 text-amber-800 px-2.5 py-0.5 text-[10px] font-bold rounded-md whitespace-nowrap">
                                 ${getAgeGroupName(post.category)}
                             </span>
                             ${tagsHtml}
@@ -734,7 +736,7 @@
             subCats.forEach(cat => {
                 if (cat.id !== 'all') { // 新規投稿で「すべて」はチェックさせない
                     html += `
-                        <label class="flex items-center gap-2 p-1.5 text-xs cursor-pointer hover:bg-white rounded-lg transition-all border border-transparent hover:border-stone-100">
+                        <label class="flex items-center gap-2 p-1.5 text-xs cursor-pointer hover:bg-white rounded-lg transition-all border border-transparent hover:border-stone-100 whitespace-nowrap">
                             <input type="checkbox" name="new-subcategories" value="${cat.id}" onchange="checkOtherOption()" class="rounded text-amber-800 focus:ring-amber-500 w-4 h-4 border-stone-300">
                             <span class="text-stone-700">${cat.name}</span>
                         </label>
