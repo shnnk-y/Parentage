@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parentage（パレンテージ） | 先輩パパ・ママから、今がんばるあなたへの贈り物</title>
-    <!-- Tailwind CSS -->
+    
+    <!-- 1. Tailwind CSS (デザインを最速で適用するため、一番最初に同期で読み込みます) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
+    
+    <!-- 2. FontAwesome Icons (アイコンフォントの読み込み) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts: 温かみのあるフォント -->
+    
+    <!-- 3. Google Fonts: 温かみのあるフォント -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <!-- Alpine.js用のロジック定義 -->
+    <!-- 4. Alpine.js用のデータ定義 (Alpine.js本体が読み込まれる前に確実にメモリ上に登録します) -->
     <script>
         function app() {
             return {
@@ -122,7 +125,7 @@
                     ]
                 },
 
-                // 初期モックデータ (2つの例を厳密に区別するため isExample: true プロパティを付与)
+                // 初期モックデータ (2つの例のみ)
                 posts: [
                     {
                         id: 7,
@@ -159,7 +162,7 @@
                     gender: 'mix',
                     category: 'infant',
                     sub_categories: [], 
-                    custom_tag: '', // 「その他」記述用のステート
+                    custom_tag: '', 
                     author_name: '',
                     child_status: '',
                     title: '',
@@ -208,19 +211,15 @@
                     return `✨ ${ageName}の専門テーマ:`;
                 },
 
-                // フィルタリングロジック（例：の特別表示制御 ＆ ピン留めソートを実装）
+                // フィルタリングロジック（例の特別表示制御 ＆ ピン留めソート）
                 get filteredPosts() {
-                    // 性別、年齢、テーマすべてが「すべて(all)」が選ばれているかどうかを判定
                     const isAllSelected = this.selectedGender === 'all' && this.selectedAge === 'all' && this.selectedSubCategory === 'all';
 
-                    // 1. 各フィルター条件に基づいて投稿を絞り込み
                     let result = this.posts.filter(post => {
-                        // 例ポスト(isExample)の場合、すべての条件が「すべて(all)」である時のみ表示する
                         if (post.isExample) {
                             return isAllSelected;
                         }
 
-                        // 通常投稿の絞り込み
                         const matchGender = this.selectedGender === 'all' || post.gender === this.selectedGender;
                         const matchAge = this.selectedAge === 'all' || post.category === this.selectedAge;
                         const matchSubCategory = this.selectedSubCategory === 'all' || 
@@ -229,14 +228,9 @@
                         return matchGender && matchAge && matchSubCategory;
                     });
 
-                    // 2. ピン留めソート（何が新しく投稿されても、例ポストが常に一番上に来るように並び替え）
                     result.sort((a, b) => {
-                        // a が例で、b が通常の場合、a を前にする
                         if (a.isExample && !b.isExample) return -1;
-                        // a が通常で、b が例の場合、b を前にする
                         if (!a.isExample && b.isExample) return 1;
-
-                        // 例同士、または通常投稿同士は、IDの降順（新しい順）
                         return b.id - a.id;
                     });
 
@@ -300,11 +294,11 @@
 
                     const postToAdd = {
                         id: newId,
-                        isExample: false, // ユーザーが新規投稿したものは「例」ではない
+                        isExample: false, 
                         gender: this.newPost.gender,
                         category: this.newPost.category,
                         sub_categories: [...this.newPost.sub_categories], 
-                        custom_tag: this.isOtherSelected() ? this.newPost.custom_tag.trim() : '', // その他選択時のみタグを格納
+                        custom_tag: this.isOtherSelected() ? this.newPost.custom_tag.trim() : '', 
                         author_name: this.newPost.author_name.trim() || '匿名先輩ママ・パパ',
                         child_status: this.newPost.child_status.trim() || '未記入',
                         title: this.newPost.title.trim(),
@@ -317,7 +311,6 @@
                     this.myPostIds.push(newId);
                     this.isModalOpen = false;
                     
-                    // 投稿後は、その投稿の年齢・テーマの個別カテゴリ画面へ遷移
                     this.selectedGender = postToAdd.gender;
                     this.selectedAge = postToAdd.category;
                     this.selectedSubCategory = postToAdd.sub_categories[0]; 
@@ -345,7 +338,8 @@
             }
         }
     </script>
-    <!-- Alpine.js (評価を安全に行うため、定義より後ろに配置) -->
+
+    <!-- 5. Alpine.js 本体 (deferを付与してHTMLのパース後に実行、デザインが絶対に崩れないようロードします) -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
@@ -629,7 +623,7 @@
                             </div>
                         </div>
 
-                        <!-- 投稿タイトル (placeholderをご指定の文言に変更) -->
+                        <!-- 投稿タイトル (placeholder) -->
                         <div>
                             <label class="block text-xs font-bold text-stone-500 mb-1">アドバイスのタイトル <span class="text-red-400">*</span></label>
                             <input type="text" x-model="newPost.title" required placeholder="例：育休をとって、自分自身も成長した話" class="w-full text-xs border border-stone-200 rounded-xl p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
