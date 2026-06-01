@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parentage（パレンテージ） | 先輩パパ・ママから、今がんばるあなたへの贈り物</title>
     
-    <!-- 1. Tailwind CSS (デザイン用スタイル：一番最初に同期読み込みします) -->
+    <!-- 1. Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- 2. FontAwesome Icons (アイコン用) -->
+    <!-- 2. FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- 3. Google Fonts: 温かみのあるフォント -->
+    <!-- 3. Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
@@ -19,12 +19,11 @@
     <style>
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background-color: #fefcf9; /* より優しく温かみのあるクリーム色 */
+            background-color: #fefcf9;
         }
         .font-cozy {
             font-family: 'Kiwi Maru', serif;
         }
-        /* スクロールバー非表示（カテゴリタブ用） */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -32,15 +31,29 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        /* テーマ選択用のあたたかみのある極細カスタムスクロールバー */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f5f5f4; /* stone-100 */
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d6d3d1; /* stone-300 */
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; /* stone-400 */
+        }
     </style>
 </head>
 <body class="text-stone-800 min-h-screen flex flex-col pb-24">
 
-    <!-- 1. ヘッダー (一輪のお花アイコン) -->
+    <!-- ヘッダー -->
     <header class="bg-[#fefcf9]/95 border-b border-amber-100/60 backdrop-blur sticky top-0 z-30 py-4 px-4 shadow-sm">
         <div class="max-w-2xl mx-auto flex flex-col items-center text-center">
             <h1 class="font-cozy text-2xl md:text-3xl font-bold text-amber-800 tracking-wider flex items-center justify-center gap-3">
-                <!-- 元気な一輪のお花のロゴアイコン -->
                 <div class="w-10 h-10 md:w-12 md:h-12 shrink-0 bg-white rounded-full overflow-hidden flex items-center justify-center border border-amber-100 shadow-sm">
                     <svg class="w-full h-full p-1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                         <ellipse cx="32" cy="54" rx="16" ry="3" fill="#cbd5e1" opacity="0.4" />
@@ -64,53 +77,33 @@
     </header>
 
     <main class="max-w-2xl mx-auto w-full px-4 mt-6 flex-grow">
-
-        <!-- 2. 第1階層：性別タブ -->
+        <!-- 階層タブ群（男子・女子の横から記号を削除しました） -->
         <div class="bg-stone-100 p-1.5 rounded-full flex mb-4 shadow-inner">
-            <button id="btn-gender-all" onclick="setGender('all')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 bg-white text-amber-900 font-bold shadow">
-                すべて
-            </button>
-            <button id="btn-gender-boy" onclick="setGender('boy')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 text-stone-500 hover:text-stone-700 hover:text-sky-600 flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-mars text-xs"></i>男子
-            </button>
-            <button id="btn-gender-girl" onclick="setGender('girl')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 text-stone-500 hover:text-stone-700 hover:text-rose-400 flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-venus text-xs"></i>女子
-            </button>
+            <button id="btn-gender-all" onclick="setGender('all')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 bg-white text-amber-900 font-bold shadow">すべて</button>
+            <button id="btn-gender-boy" onclick="setGender('boy')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 text-stone-500 hover:text-stone-700 hover:text-sky-600 flex items-center justify-center">男子</button>
+            <button id="btn-gender-girl" onclick="setGender('girl')" class="flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 text-stone-500 hover:text-stone-700 hover:text-rose-400 flex items-center justify-center">女子</button>
         </div>
 
-        <!-- 3. 第2階層：年齢層タブ (スクロール対応) -->
-        <div id="age-tabs-container" class="flex gap-2 overflow-x-auto no-scrollbar pb-3 mb-4 border-b border-amber-100/60">
-            <!-- JSで動的に年齢層ボタンが生成されます -->
-        </div>
+        <div id="age-tabs-container" class="flex gap-2 overflow-x-auto no-scrollbar pb-3 mb-4 border-b border-amber-100/60"></div>
 
-        <!-- 4. 第3階層：年齢層に連動した動的テーマカテゴリタブ -->
         <div class="mb-6 bg-amber-50/30 p-3.5 rounded-2xl border border-amber-100/40">
             <p class="text-[11px] font-bold text-stone-500 mb-2.5 px-1 flex items-center justify-between">
                 <span class="flex items-center gap-1">
                     <i class="fa-solid fa-tags text-amber-600"></i>
                     <span id="theme-section-label">共通・総合テーマ:</span>
                 </span>
-                <span id="theme-warning-text" class="text-[10px] text-amber-700/80 font-normal">
-                    ※年齢層を選ぶと、さらに専門的なテーマが現れます
-                </span>
+                <span id="theme-warning-text" class="text-[10px] text-amber-700/80 font-normal">※年齢層を選ぶと、さらに専門的なテーマが現れます</span>
             </p>
-            <div id="subcategories-container" class="flex flex-wrap gap-2">
-                <!-- JSで年齢に連動したボタンが動的に描画されます -->
-            </div>
+            <div id="subcategories-container" class="flex flex-wrap gap-2"></div>
         </div>
 
-        <!-- 5. タイムライン（絞り込み結果） -->
-        <div id="timeline-container" class="space-y-4">
-            <!-- JSで投稿カードが動的に流し込まれます -->
-        </div>
+        <!-- タイムライン -->
+        <div id="timeline-container" class="space-y-4"></div>
     </main>
 
-    <!-- 6. 新規投稿モーダル（書き込みフォーム） -->
+    <!-- 新規投稿モーダル -->
     <div id="post-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
-        <!-- 背景ダークアウト -->
         <div class="fixed inset-0 bg-stone-900/50 backdrop-blur-sm" onclick="closePostModal()"></div>
-
-        <!-- フォームコンテナ -->
         <div class="relative min-h-screen flex items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-xl relative z-10 border border-amber-100/30">
                 <div class="flex justify-between items-center mb-4 border-b border-stone-100 pb-3">
@@ -122,14 +115,9 @@
                     </button>
                 </div>
 
-                <!-- フォーム本体 -->
                 <form id="new-post-form" onsubmit="submitPost(event)">
-                    <p class="text-[11px] text-stone-400 mb-4 flex items-center gap-1">
-                        <span class="text-red-400 font-bold">*</span> は必須入力項目です
-                    </p>
-
+                    <p class="text-[11px] text-stone-400 mb-4 flex items-center gap-1"><span class="text-red-400 font-bold">*</span> は必須入力項目です</p>
                     <div class="space-y-4">
-                        <!-- 子どもの性別 -->
                         <div>
                             <label class="block text-xs font-bold text-stone-500 mb-1.5">子どもの性別 <span class="text-red-400">*</span></label>
                             <div class="grid grid-cols-3 gap-2">
@@ -145,7 +133,6 @@
                             </div>
                         </div>
 
-                        <!-- 対象の年齢層 ＆ 動的テーマカテゴリ -->
                         <div>
                             <label class="block text-xs font-bold text-stone-500 mb-1">いつ頃のアドバイス？ <span class="text-red-400">*</span></label>
                             <select id="new-category-select" onchange="syncNewPostSubCategory()" class="w-full text-xs border border-stone-200 rounded-xl p-2.5 bg-white text-stone-700 focus:ring-2 focus:ring-amber-500 focus:outline-none">
@@ -158,23 +145,22 @@
                             </select>
                         </div>
 
-                        <!-- 複数選択チェックボックス型テーマ選択 -->
                         <div>
-                            <label class="block text-xs font-bold text-stone-500 mb-1.5">アドバイスのテーマ（複数選択できます） <span class="text-red-400">*</span></label>
-                            <div id="new-subcategories-list-container" class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto border border-stone-200 rounded-xl p-3 bg-stone-50/50">
-                                <!-- JSで年齢層に連動してチェックボックスが動的に生成されます -->
-                            </div>
+                            <label class="block text-xs font-bold text-stone-500 mb-1.5">アドバイスのテーマ（複数選択可） <span class="text-red-400">*</span></label>
+                            <div id="new-subcategories-list-container" class="grid grid-cols-2 gap-1.5 max-h-36 overflow-y-auto border border-stone-200 rounded-xl p-2.5 bg-stone-50/50 custom-scrollbar"></div>
+                            
+                            <p class="text-[10px] text-stone-400 mt-1 flex items-center gap-1">
+                                <i class="fa-solid fa-arrows-up-down text-[9px]"></i>
+                                <span>項目が多い場合は上下スクロールでさらなるテーマが表示されます</span>
+                            </p>
                             <p id="checkbox-warning" class="text-[10px] text-rose-500 mt-1 font-medium hidden">※テーマを1つ以上選択してください</p>
                         </div>
 
-                        <!-- 「その他」を選んだ時だけアコーディオン風に現れる詳細テーマ入力欄 -->
                         <div id="new-custom-tag-container" class="bg-amber-50/40 p-3 rounded-xl border border-amber-100/50 hidden">
-                            <label class="block text-xs font-bold text-stone-600 mb-1">「その他」の具体的なテーマは何ですか？（任意）</label>
-                            <input type="text" id="new-custom-tag-input" placeholder="例: 夫婦関係、不登校、義実家、お小遣い など" class="w-full text-xs border border-stone-200 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
-                            <p class="text-[10px] text-stone-400 mt-1">※ここに入力した文字が、メイン画面で「#その他 (〇〇)」と表示されます。</p>
+                            <label class="block text-xs font-bold text-stone-600 mb-1">「その他」の具体的なテーマ（任意）</label>
+                            <input type="text" id="new-custom-tag-input" placeholder="例: 夫婦関係、不登校、お小遣い など" class="w-full text-xs border border-stone-200 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
                         </div>
 
-                        <!-- 投稿者の現在の状況 -->
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-bold text-stone-500 mb-1">あなたのニックネーム</label>
@@ -182,18 +168,15 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-stone-500 mb-1">お子さんの現在の状況</label>
-                                <!-- ご指定いただいた「例：24歳社会人、20歳長男」にプレースホルダーを変更 -->
-                                <input type="text" id="new-child-status" placeholder="例: 24歳社会人、20歳長男" class="w-full text-xs border border-stone-200 rounded-xl p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                <input type="text" id="new-child-status" placeholder="例：24歳社会人、20歳長男" class="w-full text-xs border border-stone-200 rounded-xl p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
                             </div>
                         </div>
 
-                        <!-- 投稿タイトル -->
                         <div>
                             <label class="block text-xs font-bold text-stone-500 mb-1">アドバイスのタイトル <span class="text-red-400">*</span></label>
                             <input type="text" id="new-title" required placeholder="例：育休をとって、自分自身も成長した話" class="w-full text-xs border border-stone-200 rounded-xl p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
                         </div>
 
-                        <!-- 投稿本文 -->
                         <div>
                             <label class="block text-xs font-bold text-stone-500 mb-1">経験談・伝えたいアドバイス <span class="text-red-400">*</span></label>
                             <textarea id="new-content" required rows="4" placeholder="あの頃の悩んでいた自分に語りかけるように、あたたかいメッセージをお願いします。" class="w-full text-xs border border-stone-200 rounded-xl p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
@@ -201,19 +184,15 @@
                     </div>
 
                     <div class="mt-6 flex gap-3">
-                        <button type="button" onclick="closePostModal()" class="flex-1 bg-stone-100 hover:bg-stone-200 text-stone-600 font-bold py-3 rounded-xl text-xs transition-colors">
-                            キャンセル
-                        </button>
-                        <button type="submit" id="submit-post-btn" class="flex-1 bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 rounded-xl text-xs shadow-md transition-all">
-                            投稿する
-                        </button>
+                        <button type="button" onclick="closePostModal()" class="flex-1 bg-stone-100 hover:bg-stone-200 text-stone-600 font-bold py-3 rounded-xl text-xs transition-colors">キャンセル</button>
+                        <button type="submit" id="submit-post-btn" class="flex-1 bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 rounded-xl text-xs shadow-md transition-all">投稿する</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- 削除確認カスタムモーダル -->
+    <!-- 削除確認モーダル -->
     <div id="delete-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
         <div class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
         <div class="relative min-h-screen flex items-center justify-center p-4">
@@ -222,43 +201,43 @@
                     <i class="fa-solid fa-triangle-exclamation text-xl"></i>
                 </div>
                 <h3 class="font-cozy font-bold text-lg text-stone-800 mb-2">投稿を削除しますか？</h3>
-                <p class="text-xs text-stone-500 leading-relaxed mb-6">
-                    この操作は取り消せません。あなたが投稿したこのあたたかいバトンを、完全にタイムラインから消去します。
-                </p>
+                <p class="text-xs text-stone-500 leading-relaxed mb-6">この操作は取り消せません。あなたが投稿したこのあたたかいバトンを、完全に消去します。</p>
                 <div class="flex gap-3">
-                    <button type="button" onclick="closeDeleteModal()" class="flex-1 bg-stone-100 hover:bg-stone-200 text-stone-600 font-bold py-2.5 rounded-xl text-xs transition-colors">
-                        残しておく
-                    </button>
-                    <button type="button" onclick="executeDeletePost()" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm transition-all">
-                        削除する
-                    </button>
+                    <button type="button" onclick="closeDeleteModal()" class="flex-1 bg-stone-100 hover:bg-stone-200 text-stone-600 font-bold py-2.5 rounded-xl text-xs transition-colors">残しておく</button>
+                    <button type="button" onclick="executeDeletePost()" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm transition-all">削除する</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 7. フローティング・アクション・ボタン -->
-    <button onclick="openPostModal()" class="fixed bottom-6 right-6 bg-gradient-to-r from-amber-800 to-amber-900 hover:from-amber-900 hover:to-stone-900 text-white py-4 px-6 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 z-40 flex items-center justify-center gap-2 border-2 border-amber-600 opacity-100 font-bold">
+    <!-- FAB -->
+    <button onclick="openPostModal()" class="fixed bottom-6 right-6 bg-gradient-to-r from-amber-800 to-amber-900 hover:from-amber-900 hover:to-stone-900 text-white py-4 px-6 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 z-40 flex items-center justify-center gap-2 border-2 border-amber-600 font-bold">
         <i class="fa-solid fa-pen-fancy text-base animate-bounce text-amber-300"></i>
         <span class="text-xs font-bold pr-1 tracking-wider">経験談を贈る</span>
     </button>
 
-    <!-- 8. 下部簡易フッター -->
     <footer class="mt-auto py-8 text-center text-xs text-stone-400 border-t border-stone-100 bg-stone-50">
         <p>© Parentage</p>
     </footer>
 
-    <!-- 純粋なJavaScript（Vanilla JS）による完璧なロジック処理 -->
     <script>
-        // 1. 状態管理
+        // --- セキュリティ対策：HTMLエスケープ関数 ---
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         let selectedGender = 'all';
         let selectedAge = 'all';
         let selectedSubCategory = 'all';
-        
         let postToDelete = null;
-        let myPostIds = []; // 自分が投稿した記事のID
+        let myPostIds = [];
 
-        // 2. 年齢層リスト
         const ageGroups = [
             { id: 'all', name: 'すべて' },
             { id: 'infant', name: '乳幼児 (0~3歳)' },
@@ -269,125 +248,103 @@
             { id: 'adult', name: '社会人・大学生以降' }
         ];
 
-        // 3. サブカテゴリテーマのマッピング
+        // 各カテゴリのサブテーマ
         const subCategoriesByAge = {
             all: [
-                { id: 'all', name: 'すべて' },
-                { id: 'study', name: '📚 勉強・教育' },
-                { id: 'relation', name: '🤝 友達・人間関係' },
-                { id: 'life', name: '🍎 生活・健康' },
-                { id: 'mind', name: '🌱 心の成長・反抗期' },
-                { id: 'living_alone', name: '🏡 一人暮らし' },
-                { id: 'single', name: '🫂 ひとり親・シングル' },
+                { id: 'all', name: 'すべて' }, 
+                { id: 'study', name: '📚 勉強・教育' }, 
+                { id: 'relation', name: '🤝 友達・人間関係' }, 
+                { id: 'life', name: '🍎 生活・健康' }, 
+                { id: 'mind', name: '🌱 心の成長・反抗期' }, 
+                { id: 'living_alone', name: '🏡 一人暮らし' }, 
+                { id: 'single', name: '🫂 ひとり親・シングル' }, 
                 { id: 'general', name: '💬 その他' }
             ],
             infant: [
-                { id: 'all', name: 'すべて' },
-                { id: 'milk', name: '🍼 授乳・離乳食・アレルギー' },
-                { id: 'sleep', name: '😴 夜泣き・睡眠' },
-                { id: 'toilet', name: '🚽 トイトレ' },
-                { id: 'play', name: '🧸 遊び・おもちゃ' },
-                { id: 'health', name: '🩺 発育・健康' },
-                { id: 'work', name: '💼 育休・仕事との両立' },
-                { id: 'single', name: '🫂 ひとり親・シングル' },
+                { id: 'all', name: 'すべて' }, 
+                { id: 'milk', name: '🍼 授乳・離乳食・アレルギー' }, 
+                { id: 'sleep', name: '😴 夜泣き・睡眠' }, 
+                { id: 'toilet', name: '🚽 トイトレ' }, 
+                { id: 'play', name: '🧸 遊び・おもちゃ' }, 
+                { id: 'health', name: '🩺 発育・健康' }, 
+                { id: 'work', name: '💼 育休・仕事との両立' }, 
+                { id: 'single', name: '🫂 ひとり親・シングル' }, 
                 { id: 'general', name: '💬 その他' }
             ],
             kinder: [
-                { id: 'all', name: 'すべて' },
-                { id: 'refusal', name: '🏫 登園しぶり' },
-                { id: 'friend', name: '🤝 お友達関係' },
-                { id: 'lesson', name: '🎨 習い事・行事' },
-                { id: 'discipline', name: '🧠 しつけ・自立' },
-                { id: 'habit', name: '🍎 食事・アレルギー' },
-                { id: 'work', name: '💼 仕事との両立' },
-                { id: 'single', name: '🫂 ひとり親・シングル' },
+                { id: 'all', name: 'すべて' }, 
+                { id: 'refusal', name: '🏫 登園しぶり' }, 
+                { id: 'friend', name: '🤝 お友達関係' }, 
+                { id: 'lesson', name: '🎨 習い事・行事' }, 
+                { id: 'discipline', name: '🧠 しつけ・自立' }, 
+                { id: 'habit', name: '🍎 食事' }, 
+                { id: 'work', name: '💼 仕事との両立' }, 
+                { id: 'single', name: '🫂 ひとり親・シングル' }, 
                 { id: 'general', name: '💬 その他' }
             ],
             elem: [
-                { id: 'all', name: 'すべて' },
-                { id: 'homework', name: '📚 宿題・勉強' },
-                { id: 'exam_elem', name: '📝 中学受験' },
-                { id: 'wall1', name: '🏫 小1の壁・学校生活' },
-                { id: 'allergy_elem', name: '🍱 給食・アレルギー' },
-                { id: 'friend', name: '🤝 友達・いじめ' },
-                { id: 'lesson', name: '🎨 習い事' },
-                { id: 'sport', name: '🏆 スポーツ' },
-                { id: 'game', name: '📱 ゲーム・スマホ' },
-                { id: 'work', name: '💼 仕事との両立' },
-                { id: 'single', name: '🫂 ひとり親・シングル' },
+                { id: 'all', name: 'すべて' }, 
+                { id: 'homework', name: '📚 宿題・勉強' }, 
+                { id: 'exam_elem', name: '📝 中学受験' }, 
+                { id: 'wall1', name: '🏫 小1の壁・学校生活' }, 
+                { id: 'allergy_elem', name: '🍱 給食・アレルギー' }, 
+                { id: 'friend', name: '🤝 友達・いじめ' }, 
+                { id: 'lesson', name: '🎨 習い事' }, 
+                { id: 'sport', name: '🏆 スポーツ' }, 
+                { id: 'game', name: '📱 ゲーム・スマホ' }, 
+                { id: 'work', name: '💼 仕事との両立' }, 
+                { id: 'single', name: '🫂 ひとり親・シングル' }, 
                 { id: 'general', name: '💬 その他' }
             ],
             jhs: [
-                { id: 'all', name: 'すべて' },
-                { id: 'rebel', name: '⚡ 反抗期・親子関係' },
-                { id: 'exam', name: '📚 高校受験・勉強' },
-                { id: 'friend', name: '🤝 友達関係' },
-                { id: 'club', name: '⚽ 部活動' },
-                { id: 'game', name: '📱 ゲーム・スマホ' },
-                { id: 'career', name: '🚀 将来の夢・進路' },
-                { id: 'work', name: '💼 仕事との両立' },
-                { id: 'single', name: '🫂 ひとり親・シングル' },
+                { id: 'all', name: 'すべて' }, 
+                { id: 'rebel', name: '⚡ 反抗期・親子関係' }, 
+                { id: 'exam', name: '📚 高校受験・勉強' }, 
+                { id: 'friend', name: '🤝 友達関係' }, 
+                { id: 'club', name: '⚽ 部活動' }, 
+                { id: 'game', name: '📱 ゲーム・スマホ' }, 
+                { id: 'career', name: '🚀 将来の夢・進路' }, 
+                { id: 'work', name: '💼 仕事との両立' }, 
+                { id: 'single', name: '🫂 ひとり親・シングル' }, 
                 { id: 'general', name: '💬 その他' }
             ],
             hs: [
-                { id: 'all', name: 'すべて' },
-                { id: 'rebel', name: '⚡ 自立期・親子関係' },
-                { id: 'exam', name: '📚 受験・進学進路' },
-                { id: 'love', name: '💖 恋愛・交友関係' },
-                { id: 'club', name: '⚽ 部活動' },
-                { id: 'part_time', name: '💰 アルバイト' },
-                { id: 'living_alone', name: '🏡 一人暮らし' },
-                { id: 'single', name: '🫂 ひとり親・シングル' },
+                { id: 'all', name: 'すべて' }, 
+                { id: 'rebel', name: '⚡ 自立・親子関係' }, 
+                { id: 'exam', name: '📚 受験・進路' }, 
+                { id: 'love', name: '💖 恋愛・交友関係' }, 
+                { id: 'club', name: '⚽ 部活動' }, 
+                { id: 'part_time', name: '💰 アルバイト' }, 
+                { id: 'living_alone', name: '🏡 一人暮らし' }, 
+                { id: 'single', name: '🫂 ひとり親・シングル' }, 
                 { id: 'general', name: '💬 その他' }
             ],
             adult: [
-                { id: 'all', name: 'すべて' },
-                { id: 'college', name: '🎓 大学・専門生活' },
-                { id: 'job', name: '💼 就職' },
-                { id: 'part_time', name: '💰 アルバイト' },
-                { id: 'living_alone', name: '🏡 一人暮らし' },
-                { id: 'marriage', name: '💍 結婚・恋愛' },
-                { id: 'distance', name: '🤝 親子の適切な距離' },
-                { id: 'single', name: '🫂 ひとり親・シングル' },
+                { id: 'all', name: 'すべて' }, 
+                { id: 'college', name: '🎓 大学・専門生活' }, 
+                { id: 'job', name: '💼 就職' }, 
+                { id: 'part_time', name: '💰 アルバイト' }, 
+                { id: 'living_alone', name: '🏡 一人暮らし' }, 
+                { id: 'marriage', name: '💍 結婚・恋愛' }, 
+                { id: 'distance', name: '🤝 親子の適切な距離' }, 
+                { id: 'single', name: '🫂 ひとり親・シングル' }, 
                 { id: 'general', name: '💬 その他' }
             ]
         };
 
-        // 4. 初期投稿データ (例となる2つのみ)
         let posts = [
             {
-                id: 7,
-                isExample: true,
-                gender: 'girl',
-                category: 'infant',
-                sub_categories: ['work'], 
-                custom_tag: '',
-                author_name: '匿名パパ',
-                child_status: '未記入',
-                title: '例：育休をとって、自分自身も成長した話',
-                content: '育休を1年間取得しました。\n\n「少しでも支えになれたら」という思いで始めたものの、最初の1ヶ月は、おむつ替えも泣き止ませ方もわからず、戸惑うことばかりでした。\nしかし、その時間を通して、妻が毎日どれほど大変な思いをしていたのかを、初めて実感することができました。\n\nそれまでは「手伝う」という感覚でしたが、育休を経験したことで、「一緒に子育てをする」という意識へと変わっていったように思います。\n子どもが少し大きくなった頃、「パパってずっと一緒にいたよね」と言ってくれた時は、本当に育休を取ってよかったと心から感じました。\n仕事を離れる不安もありましたが、家族と過ごしたあの時間は、それ以上にかけがえのないものでした。\n\nもし取得を迷っているなら、ぜひ一歩踏み出してみてほしいです。',
-                thank_count: 0,
-                hasThanked: false,
-                expanded: false // 詳細表示用のステート
+                id: 7, isExample: true, gender: 'girl', category: 'infant', sub_categories: ['work'], custom_tag: '', author_name: '匿名パパ', child_status: '未記入', title: '例：育休をとって、自分自身も成長した話',
+                content: '育休を1年間取得しました。\n\n「少しでも支えになれたら」という思いで始めたものの、最初の1ヶ月は、おむつ替えも泣き止ませ方もわからず、戸惑うことばかりでした。\nしかし、その時間を通して、妻が毎日どれほど大変な思いをしていたのかを、初めて実感することができました。\n\nそれまでは「手伝う」という感覚でしたが、育休を経験したことで、「一緒に子育てをする」という意識へと変わっていったように思います。',
+                thank_count: 0, hasThanked: false, expanded: false
             },
             {
-                id: 6,
-                isExample: true,
-                gender: 'boy',
-                category: 'adult',
-                sub_categories: ['general'], 
-                custom_tag: '成人式',
-                author_name: '匿名ママ',
-                child_status: '20歳大学生(長男)',
-                title: '例：「ちゃんとできているのか」不安だった',
-                content: '子育てに正解がないことは頭でわかっていても、「これでいいのか」という不安はずっとありました。\nでも成人した子供に「どんな子供時代だった？」と聞いた時、「楽しかったよ」と言ってくれたんです。その一言で、あの不安だらけの日々が全部報われた気がしました。今不安な方も、きっと大丈夫です。悩んでいる親のそばで、子供はちゃんと育っています。',
-                thank_count: 0,
-                hasThanked: false,
-                expanded: false
+                id: 6, isExample: true, gender: 'boy', category: 'adult', sub_categories: ['general'], custom_tag: '成人式', author_name: '匿名ママ', child_status: '20歳大学生(長男)', title: '例：「ちゃんとできているのか」不安だった',
+                content: '子育てに正解がないことは頭でわかっていても、「これでいいのか」という不安はずっとありました。\nでも成人した子供に「どんな子供時代だった？」と聞いた時、「楽しかったよ」と言ってくれたんです。その一言で、あの不安だらけの日々が全部報われた気がしました。',
+                thank_count: 0, hasThanked: false, expanded: false
             }
         ];
 
-        // 5. DOMのロード完了時に即初期化描画する（SPでの読み込みエラーを防ぎます）
         window.addEventListener('DOMContentLoaded', () => {
             initApp();
         });
@@ -398,30 +355,23 @@
             renderTimeline();
         }
 
-        // --- 性別変更処理 ---
+        // --- 性別変更処理（記号なしボタン用のクラス調整） ---
         function setGender(gender) {
             selectedGender = gender;
-            
-            // クラスの書き換え (すべて・男子・女子ボタン)
             const genders = ['all', 'boy', 'girl'];
             genders.forEach(g => {
                 const btn = document.getElementById(`btn-gender-${g}`);
                 if (g === gender) {
-                    if (g === 'all') {
-                        btn.className = "flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 bg-white text-amber-900 font-bold shadow";
-                    } else if (g === 'boy') {
-                        btn.className = "flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 bg-sky-500 text-white font-bold shadow flex items-center justify-center gap-1.5";
-                    } else if (g === 'girl') {
-                        btn.className = "flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 bg-rose-400 text-white font-bold shadow flex items-center justify-center gap-1.5";
-                    }
+                    if (g === 'all') btn.className = "flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 bg-white text-amber-900 font-bold shadow";
+                    else if (g === 'boy') btn.className = "flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 bg-sky-500 text-white font-bold shadow flex items-center justify-center";
+                    else if (g === 'girl') btn.className = "flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 bg-rose-400 text-white font-bold shadow flex items-center justify-center";
                 } else {
                     let baseClass = "flex-1 py-2 text-xs md:text-sm rounded-full transition-all duration-200 text-stone-500 hover:text-stone-700";
-                    if (g === 'boy') baseClass += " hover:text-sky-600 flex items-center justify-center gap-1.5";
-                    if (g === 'girl') baseClass += " hover:text-rose-400 flex items-center justify-center gap-1.5";
+                    if (g === 'boy') baseClass += " hover:text-sky-600 flex items-center justify-center";
+                    if (g === 'girl') baseClass += " hover:text-rose-400 flex items-center justify-center";
                     btn.className = baseClass;
                 }
             });
-
             renderTimeline();
         }
 
@@ -429,21 +379,18 @@
         function renderAgeTabs() {
             const container = document.getElementById('age-tabs-container');
             let html = '';
-            
             ageGroups.forEach(age => {
                 const isSelected = selectedAge === age.id;
                 const activeClass = "bg-amber-700 text-white font-bold scale-105 px-4 py-2.5 text-xs md:text-sm rounded-xl whitespace-nowrap transition-all duration-150 shadow-sm";
                 const inactiveClass = "bg-amber-50/50 text-amber-800 border border-amber-200/60 hover:bg-amber-100/50 px-4 py-2.5 text-xs md:text-sm rounded-xl whitespace-nowrap transition-all duration-150 shadow-sm";
-                
                 html += `<button onclick="setAgeGroup('${age.id}')" class="${isSelected ? activeClass : inactiveClass}">${age.name}</button>`;
             });
-            
             container.innerHTML = html;
         }
 
         function setAgeGroup(ageId) {
             selectedAge = ageId;
-            selectedSubCategory = 'all'; // 年齢層が変わったらテーマを一度「すべて」にリセット
+            selectedSubCategory = 'all';
             renderAgeTabs();
             renderSubCategories();
             renderTimeline();
@@ -453,8 +400,6 @@
         function renderSubCategories() {
             const container = document.getElementById('subcategories-container');
             const list = subCategoriesByAge[selectedAge] || subCategoriesByAge['all'];
-            
-            // ラベルの動的更新
             const label = document.getElementById('theme-section-label');
             const warningText = document.getElementById('theme-warning-text');
             
@@ -463,21 +408,17 @@
                 warningText.style.display = 'inline';
             } else {
                 const foundAge = ageGroups.find(a => a.id === selectedAge);
-                const ageName = foundAge ? foundAge.name.split(' ')[0] : '';
-                label.innerText = `✨ ${ageName}の専門テーマ:`;
+                label.innerText = `✨ ${foundAge ? foundAge.name.split(' ')[0] : ''}の専門テーマ:`;
                 warningText.style.display = 'none';
             }
 
             let html = '';
             list.forEach(cat => {
                 const isSelected = selectedSubCategory === cat.id;
-                // 改行崩れを防ぐため、ボタンのクラスに `whitespace-nowrap` を追加し、テーマ名が途中で不自然にちぎれないよう最適化
                 const activeClass = "bg-stone-800 text-white font-bold shadow-md px-3.5 py-1.5 text-xs rounded-xl transition-all duration-150 flex items-center gap-1 whitespace-nowrap";
                 const inactiveClass = "bg-white text-stone-600 border border-stone-200/70 hover:bg-stone-50 px-3.5 py-1.5 text-xs rounded-xl transition-all duration-150 flex items-center gap-1 whitespace-nowrap";
-                
                 html += `<button onclick="setSubCategory('${cat.id}')" class="${isSelected ? activeClass : inactiveClass}">${cat.name}</button>`;
             });
-            
             container.innerHTML = html;
         }
 
@@ -490,29 +431,22 @@
         // --- タイムライン（投稿リスト）の描画 ---
         function renderTimeline() {
             const container = document.getElementById('timeline-container');
-            
-            // 例と通常の絞り込み・ソート
             const isAllSelected = selectedGender === 'all' && selectedAge === 'all' && selectedSubCategory === 'all';
             
             let filteredPosts = posts.filter(post => {
-                if (post.isExample) {
-                    return isAllSelected; // すべて・すべて・すべての時のみ表示
-                }
+                if (post.isExample) return isAllSelected;
                 const matchGender = selectedGender === 'all' || post.gender === selectedGender;
                 const matchAge = selectedAge === 'all' || post.category === selectedAge;
                 const matchSubCategory = selectedSubCategory === 'all' || (post.sub_categories && post.sub_categories.includes(selectedSubCategory));
-                
                 return matchGender && matchAge && matchSubCategory;
             });
 
-            // ピン留めソート
             filteredPosts.sort((a, b) => {
                 if (a.isExample && !b.isExample) return -1;
                 if (!a.isExample && b.isExample) return 1;
                 return b.id - a.id;
             });
 
-            // 該当データなしの場合
             if (filteredPosts.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-16 bg-white rounded-2xl border border-dashed border-stone-300 px-6">
@@ -538,112 +472,72 @@
 
             let html = '';
             filteredPosts.forEach(post => {
+                const safeTitle = escapeHTML(post.title);
+                const safeAuthor = escapeHTML(post.author_name);
+                const safeStatus = escapeHTML(post.child_status);
+                const safeContent = escapeHTML(post.content);
+
                 const borderClass = post.gender === 'boy' ? 'bg-gradient-to-r from-sky-400 to-blue-500' : (post.gender === 'girl' ? 'bg-gradient-to-r from-rose-300 to-pink-400' : 'bg-gradient-to-r from-amber-400 to-amber-500');
                 const isMyPost = myPostIds.includes(post.id);
-                
-                // 削除ボタンHTML
-                const deleteBtnHtml = isMyPost ? `
-                    <button onclick="openDeleteModal(${post.id})" class="absolute top-3 right-3 text-stone-300 hover:text-red-500 p-2 transition-colors duration-200" title="この投稿を削除する">
-                        <i class="fa-regular fa-trash-can text-sm"></i>
-                    </button>
-                ` : '';
+                const deleteBtnHtml = isMyPost ? `<button onclick="openDeleteModal(${post.id})" class="absolute top-3 right-3 text-stone-300 hover:text-red-500 p-2"><i class="fa-regular fa-trash-can text-sm"></i></button>` : '';
 
-                // サブカテゴリタグの生成
                 let tagsHtml = '';
                 post.sub_categories.forEach(subCatId => {
-                    const subCatName = getSubCategoryName(post.category, subCatId, post.custom_tag);
-                    tagsHtml += `
-                        <span class="bg-emerald-50 text-emerald-800 px-2.5 py-0.5 text-[10px] font-bold rounded-md flex items-center gap-0.5 whitespace-nowrap">
-                            <i class="fa-solid fa-hashtag text-[9px] text-emerald-600/70"></i>
-                            <span>${subCatName}</span>
-                        </span>
-                    `;
+                    const subCatName = escapeHTML(getSubCategoryName(post.category, subCatId, post.custom_tag));
+                    tagsHtml += `<span class="bg-emerald-50 text-emerald-800 px-2.5 py-0.5 text-[10px] font-bold rounded-md flex items-center gap-0.5 whitespace-nowrap"><i class="fa-solid fa-hashtag text-[9px] text-emerald-600/70"></i><span>${subCatName}</span></span>`;
                 });
 
-                // 本文の5行（180文字目安）省略処理と開閉ボタン
-                const showToggle = post.content.length > 180;
-                let displayedContent = post.content;
+                const showToggle = safeContent.length > 180;
+                let displayedContent = safeContent;
                 let toggleBtnHtml = '';
                 
                 if (showToggle && !post.expanded) {
-                    displayedContent = post.content.slice(0, 180) + '...';
-                    toggleBtnHtml = `
-                        <button onclick="toggleExpand(${post.id})" class="text-xs font-bold text-amber-800 hover:text-amber-950 focus:outline-none mt-2 inline-flex items-center gap-1 transition-colors">
-                            <span>続きを表示</span>
-                            <i class="fa-solid fa-chevron-down text-[9px]"></i>
-                        </button>
-                    `;
+                    displayedContent = safeContent.slice(0, 180) + '...';
+                    toggleBtnHtml = `<button onclick="toggleExpand(${post.id})" class="text-xs font-bold text-amber-800 mt-2">続きを表示 <i class="fa-solid fa-chevron-down text-[9px]"></i></button>`;
                 } else if (showToggle && post.expanded) {
-                    toggleBtnHtml = `
-                        <button onclick="toggleExpand(${post.id})" class="text-xs font-bold text-amber-800 hover:text-amber-950 focus:outline-none mt-2 inline-flex items-center gap-1 transition-colors">
-                            <span>閉じる</span>
-                            <i class="fa-solid fa-chevron-up text-[9px]"></i>
-                        </button>
-                    `;
+                    toggleBtnHtml = `<button onclick="toggleExpand(${post.id})" class="text-xs font-bold text-amber-800 mt-2">閉じる <i class="fa-solid fa-chevron-up text-[9px]"></i></button>`;
                 }
 
-                // ありがとうボタンのアクティブ色
-                const thankBtnClass = post.hasThanked 
-                    ? 'bg-red-50 border-red-200 text-red-500 scale-105' 
-                    : 'bg-stone-50 border-stone-100 text-stone-400 hover:text-red-400 hover:bg-red-50/30';
+                const thankBtnClass = post.hasThanked ? 'bg-red-50 border-red-200 text-red-500 scale-105' : 'bg-stone-50 border-stone-100 text-stone-400 hover:text-red-400 hover:bg-red-50/30';
                 
-                const heartClass = post.hasThanked ? 'fa-solid fa-heart fa-beat' : 'fa-solid fa-heart';
-                const thankLabel = post.hasThanked ? 'ありがとう済' : 'ありがとう';
-
                 html += `
-                    <div class="bg-white border border-stone-200/60 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                    <div class="bg-white border border-stone-200/60 rounded-2xl p-5 shadow-sm relative overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1.5 ${borderClass}"></div>
                         ${deleteBtnHtml}
-
                         <div class="flex flex-wrap gap-1.5 mb-3.5 items-center pr-8">
-                            <span class="${post.gender === 'boy' ? 'bg-sky-50 text-sky-600' : (post.gender === 'girl' ? 'bg-rose-50 text-rose-500' : 'bg-stone-100 text-stone-600')} px-2.5 py-0.5 text-[10px] font-bold rounded-md whitespace-nowrap">
-                                ${post.gender === 'boy' ? '男子' : (post.gender === 'girl' ? '女子' : '共通・その他')}
-                            </span>
-                            <span class="bg-amber-50 text-amber-800 px-2.5 py-0.5 text-[10px] font-bold rounded-md whitespace-nowrap">
-                                ${getAgeGroupName(post.category)}
-                            </span>
+                            <span class="${post.gender === 'boy' ? 'bg-sky-50 text-sky-600' : (post.gender === 'girl' ? 'bg-rose-50 text-rose-500' : 'bg-stone-100 text-stone-600')} px-2.5 py-0.5 text-[10px] font-bold rounded-md">${post.gender === 'boy' ? '男子' : (post.gender === 'girl' ? '女子' : '共通・その他')}</span>
+                            <span class="bg-amber-50 text-amber-800 px-2.5 py-0.5 text-[10px] font-bold rounded-md">${getAgeGroupName(post.category)}</span>
                             ${tagsHtml}
                         </div>
-
-                        <h3 class="font-bold text-base md:text-lg text-stone-800 mb-2.5 leading-snug">${post.title}</h3>
-                        
+                        <h3 class="font-bold text-base md:text-lg text-stone-800 mb-2.5 leading-snug">${safeTitle}</h3>
                         <div class="mb-4">
-                            <p class="text-stone-600 text-sm md:text-base leading-relaxed whitespace-pre-wrap transition-all duration-300">${displayedContent}</p>
+                            <p class="text-stone-600 text-sm md:text-base leading-relaxed whitespace-pre-wrap">${displayedContent}</p>
                             ${toggleBtnHtml}
                         </div>
-
                         <div class="flex items-center justify-between pt-3.5 border-t border-stone-100 text-xs text-stone-500">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                                <span class="flex items-center gap-1">
-                                    <i class="fa-solid fa-user-check text-amber-600/70"></i>
-                                    <span>投稿: <strong class="text-stone-700">${post.author_name}</strong></span>
-                                </span>
+                                <span><i class="fa-solid fa-user-check text-amber-600/70 mr-1"></i>投稿: <strong class="text-stone-700">${safeAuthor}</strong></span>
                                 <span class="text-stone-300 hidden sm:inline">|</span>
-                                <span>現在の状況: <strong class="text-stone-700">${post.child_status || '未記入'}</strong></span>
+                                <span>現在の状況: <strong class="text-stone-700">${safeStatus || '未記入'}</strong></span>
                             </div>
-                            <button onclick="toggleThank(${post.id})" class="flex items-center gap-1.5 py-1.5 px-3 border rounded-full transition-all duration-200 shadow-sm shrink-0 ${thankBtnClass}">
-                                <i class="${heartClass}"></i>
+                            <button onclick="toggleThank(${post.id})" class="flex items-center gap-1.5 py-1.5 px-3 border rounded-full ${thankBtnClass}">
+                                <i class="${post.hasThanked ? 'fa-solid fa-heart fa-beat' : 'fa-solid fa-heart'}"></i>
                                 <span class="font-bold text-stone-700">${post.thank_count}</span>
-                                <span class="text-[10px] font-medium hidden sm:inline">${thankLabel}</span>
                             </button>
                         </div>
                     </div>
                 `;
             });
-
             container.innerHTML = html;
         }
 
-        // --- 日本語表記用の変換ヘルパー ---
         function getAgeGroupName(catId) {
             const found = ageGroups.find(a => a.id === catId);
             return found ? found.name : catId;
         }
 
         function getSubCategoryName(ageId, subCatId, customTag) {
-            if (subCatId === 'general') {
-                return customTag ? `💬 その他 (${customTag})` : '💬 その他';
-            }
+            if (subCatId === 'general') return customTag ? `💬 その他 (${customTag})` : '💬 その他';
             const list = subCategoriesByAge[ageId] || subCategoriesByAge['all'];
             const found = list.find(s => s.id === subCatId);
             if (found) return found.name;
@@ -651,49 +545,30 @@
             return fallback ? fallback.name : subCatId;
         }
 
-        // --- 詳細折りたたみ展開 ---
         function toggleExpand(postId) {
             const post = posts.find(p => p.id === postId);
-            if (post) {
-                post.expanded = !post.expanded;
-                renderTimeline();
-            }
+            if (post) { post.expanded = !post.expanded; renderTimeline(); }
         }
 
-        // --- ありがとうボタン処理 ---
         function toggleThank(postId) {
             const post = posts.find(p => p.id === postId);
             if (post) {
-                if (post.hasThanked) {
-                    post.thank_count--;
-                    post.hasThanked = false;
-                } else {
-                    post.thank_count++;
-                    post.hasThanked = true;
-                }
+                if (post.hasThanked) { post.thank_count--; post.hasThanked = false; }
+                else { post.thank_count++; post.hasThanked = true; }
                 renderTimeline();
             }
         }
 
         // --- 新規投稿モーダル処理 ---
         function openPostModal() {
-            // 初期状態のセットアップ
-            const defaultAge = selectedAge === 'all' ? 'infant' : selectedAge;
-            document.getElementById('new-category-select').value = defaultAge;
+            document.getElementById('new-category-select').value = selectedAge === 'all' ? 'infant' : selectedAge;
             document.getElementById('new-author-name').value = '';
             document.getElementById('new-child-status').value = '';
             document.getElementById('new-title').value = '';
             document.getElementById('new-content').value = '';
             document.getElementById('new-custom-tag-input').value = '';
-            
-            // 性別選択のリセット
-            const defaultGender = selectedGender === 'all' ? 'mix' : selectedGender;
-            updateNewGenderClass(defaultGender);
-            
-            // サブテーマの再構築
+            updateNewGenderClass(selectedGender === 'all' ? 'mix' : selectedGender);
             syncNewPostSubCategory();
-            
-            // 表示
             document.getElementById('post-modal').classList.remove('hidden');
         }
 
@@ -701,94 +576,64 @@
             document.getElementById('post-modal').classList.add('hidden');
         }
 
-        // 新規投稿フォーム用の性別ボタンスタイルアップデート
         function updateNewGenderClass(gender) {
             const boyBtn = document.getElementById('label-new-boy');
             const girlBtn = document.getElementById('label-new-girl');
             const mixBtn = document.getElementById('label-new-mix');
-            
-            // 一度全リセット
             boyBtn.className = "border rounded-xl p-2.5 flex items-center justify-center gap-1 text-xs cursor-pointer transition-all border-stone-200 text-stone-600 hover:bg-stone-50";
             girlBtn.className = "border rounded-xl p-2.5 flex items-center justify-center gap-1 text-xs cursor-pointer transition-all border-stone-200 text-stone-600 hover:bg-stone-50";
-            mixBtn.className = "border rounded-xl p-2.5 flex items-center justify-center gap-1 text-xs cursor-pointer transition-all border-stone-200 text-stone-600 hover:bg-stone-50";
+            mixBtn.className = "border rounded-xl p-2.5 flex items-center justify-center gap-1 text-xs cursor-pointer transition-all border-stone-400 bg-stone-50 text-stone-700 font-bold shadow-sm";
             
-            // ラジオボタンに選択した値をマーク
             const radio = document.querySelector(`input[name="new-gender"][value="${gender}"]`);
             if (radio) radio.checked = true;
 
-            // クラス反映
-            if (gender === 'boy') {
-                boyBtn.className = "border rounded-xl p-2.5 flex items-center justify-center gap-1 text-xs cursor-pointer transition-all border-sky-500 bg-sky-50 text-sky-700 font-bold shadow-sm";
-            } else if (gender === 'girl') {
-                girlBtn.className = "border rounded-xl p-2.5 flex items-center justify-center gap-1 text-xs cursor-pointer transition-all border-rose-400 bg-rose-50 text-rose-600 font-bold shadow-sm";
-            } else if (gender === 'mix') {
-                mixBtn.className = "border rounded-xl p-2.5 flex items-center justify-center gap-1 text-xs cursor-pointer transition-all border-stone-400 bg-stone-50 text-stone-700 font-bold shadow-sm";
-            }
+            if (gender === 'boy') boyBtn.className = "border rounded-xl p-2.5 flex items-center justify-center gap-1 text-xs cursor-pointer transition-all border-sky-500 bg-sky-50 text-sky-700 font-bold shadow-sm";
+            else if (gender === 'girl') girlBtn.className = "border rounded-xl p-2.5 flex items-center justify-center gap-1 text-xs cursor-pointer transition-all border-rose-400 bg-rose-50 text-rose-600 font-bold shadow-sm";
+            else if (gender === 'mix') mixBtn.className = "border rounded-xl p-2.5 flex items-center justify-center gap-1 text-xs cursor-pointer transition-all border-stone-400 bg-stone-50 text-stone-700 font-bold shadow-sm";
         }
 
-        // 年齢層セレクトボックスに連動してテーマチェックボックスを動的描画
+        // --- 動的に年齢別チェックボックス群を組み立てる ---
         function syncNewPostSubCategory() {
             const ageId = document.getElementById('new-category-select').value;
             const subCats = subCategoriesByAge[ageId] || subCategoriesByAge['all'];
             const container = document.getElementById('new-subcategories-list-container');
-            
             let html = '';
+            
             subCats.forEach(cat => {
-                if (cat.id !== 'all') { // 新規投稿で「すべて」はチェックさせない
+                if (cat.id !== 'all') {
                     html += `
-                        <label class="flex items-center gap-2 p-1.5 text-xs cursor-pointer hover:bg-white rounded-lg transition-all border border-transparent hover:border-stone-100 whitespace-nowrap">
-                            <input type="checkbox" name="new-subcategories" value="${cat.id}" onchange="checkOtherOption()" class="rounded text-amber-800 focus:ring-amber-500 w-4 h-4 border-stone-300">
-                            <span class="text-stone-700">${cat.name}</span>
+                        <label class="flex items-start gap-2 p-1.5 text-xs cursor-pointer hover:bg-white rounded-lg transition-all border border-transparent hover:border-stone-100">
+                            <input type="checkbox" name="new-subcategories" value="${cat.id}" onchange="checkOtherOption()" class="rounded text-amber-800 focus:ring-amber-500 w-4 h-4 border-stone-300 mt-0.5 shrink-0">
+                            <span class="text-stone-700 leading-tight">${cat.name}</span>
                         </label>
                     `;
                 }
             });
-            
             container.innerHTML = html;
-            checkOtherOption(); // その他が選択されているか確認して、入力欄をリセット
+            checkOtherOption();
         }
 
-        // 「その他」がチェックされた時に、カスタムタグ詳細入力欄をアコーディオン表示する
+        // --- 「その他」のアコーディオン制御 ---
         function checkOtherOption() {
             const checkboxes = document.getElementsByName('new-subcategories');
             let otherChecked = false;
-            
-            checkboxes.forEach(cb => {
-                if (cb.value === 'general' && cb.checked) {
-                    otherChecked = true;
-                }
-            });
+            checkboxes.forEach(cb => { if (cb.value === 'general' && cb.checked) otherChecked = true; });
 
             const customTagContainer = document.getElementById('new-custom-tag-container');
-            if (otherChecked) {
-                customTagContainer.classList.remove('hidden');
-            } else {
-                customTagContainer.classList.add('hidden');
-                document.getElementById('new-custom-tag-input').value = '';
-            }
+            if (otherChecked) customTagContainer.classList.remove('hidden');
+            else { customTagContainer.classList.add('hidden'); document.getElementById('new-custom-tag-input').value = ''; }
         }
 
-        // 新規投稿送信
+        // --- 投稿処理 ---
         function submitPost(e) {
             e.preventDefault();
-            
-            // チェックされているテーマ(サブカテゴリ)を回収
             const checkboxes = document.getElementsByName('new-subcategories');
             const selectedSubCats = [];
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    selectedSubCats.push(cb.value);
-                }
-            });
+            checkboxes.forEach(cb => { if (cb.checked) selectedSubCats.push(cb.value); });
 
-            // 必須チェック
             const warning = document.getElementById('checkbox-warning');
-            if (selectedSubCats.length === 0) {
-                warning.classList.remove('hidden');
-                return;
-            } else {
-                warning.classList.add('hidden');
-            }
+            if (selectedSubCats.length === 0) { warning.classList.remove('hidden'); return; } 
+            else { warning.classList.add('hidden'); }
 
             const newId = Date.now();
             const formGender = document.querySelector('input[name="new-gender"]:checked').value;
@@ -800,29 +645,13 @@
             const content = document.getElementById('new-content').value.trim();
 
             const postToAdd = {
-                id: newId,
-                isExample: false,
-                gender: formGender,
-                category: formCategory,
-                sub_categories: selectedSubCats,
-                custom_tag: selectedSubCats.includes('general') ? customTag : '',
-                author_name: authorName,
-                child_status: childStatus,
-                title: title,
-                content: content,
-                thank_count: 0,
-                hasThanked: false,
-                expanded: false
+                id: newId, isExample: false, gender: formGender, category: formCategory, sub_categories: selectedSubCats, custom_tag: selectedSubCats.includes('general') ? customTag : '', author_name: authorName, child_status: childStatus, title: title, content: content, thank_count: 0, hasThanked: false, expanded: false
             };
 
-            // 先頭に追加し、マイポスト管理に登録
             posts.unshift(postToAdd);
             myPostIds.push(newId);
-
-            // モーダルを閉じる
             closePostModal();
 
-            // 投稿した記事の年齢・テーマタブへ自動ジャンプ
             setGender(postToAdd.gender);
             selectedAge = postToAdd.category;
             selectedSubCategory = postToAdd.sub_categories[0];
