@@ -630,11 +630,9 @@
             else { customTagContainer.classList.add('hidden'); document.getElementById('new-custom-tag-input').value = ''; }
         }
 
-        // --- 投稿処理 (Supabase版) ---
-        async function submitPost(e) {
+        // --- 投稿処理 ---
+        function submitPost(e) {
             e.preventDefault();
-    
-        // (入力値の取得部分はそのまま使います...)
             const checkboxes = document.getElementsByName('new-subcategories');
             const selectedSubCats = [];
             checkboxes.forEach(cb => { if (cb.checked) selectedSubCats.push(cb.value); });
@@ -643,34 +641,30 @@
             if (selectedSubCats.length === 0) { warning.classList.remove('hidden'); return; } 
             else { warning.classList.add('hidden'); }
 
-        // Supabaseに送るデータを作る
-            const postData = {
-            gender: document.querySelector('input[name="new-gender"]:checked').value,
-            category: document.getElementById('new-category-select').value,
-            sub_categories: selectedSubCats,
-            custom_tag: selectedSubCats.includes('general') ? document.getElementById('new-custom-tag-input').value.trim() : '',
-            author_name: document.getElementById('new-author-name').value.trim() || '匿名先輩ママ・パパ',
-            child_status: document.getElementById('new-child-status').value.trim() || '未記入',
-            title: document.getElementById('new-title').value.trim(),
-            content: document.getElementById('new-content').value.trim(),
-            thank_count: 0
+            const newId = Date.now();
+            const formGender = document.querySelector('input[name="new-gender"]:checked').value;
+            const formCategory = document.getElementById('new-category-select').value;
+            const customTag = document.getElementById('new-custom-tag-input').value.trim();
+            const authorName = document.getElementById('new-author-name').value.trim() || '匿名先輩ママ・パパ';
+            const childStatus = document.getElementById('new-child-status').value.trim() || '未記入';
+            const title = document.getElementById('new-title').value.trim();
+            const content = document.getElementById('new-content').value.trim();
+
+            const postToAdd = {
+                id: newId, isExample: false, gender: formGender, category: formCategory, sub_categories: selectedSubCats, custom_tag: selectedSubCats.includes('general') ? customTag : '', author_name: authorName, child_status: childStatus, title: title, content: content, thank_count: 0, hasThanked: false, expanded: false
             };
 
-        // Supabaseに保存！
-            const { data, error } = await supabase
-            .from('posts')
-            .insert([postData]);
+            posts.unshift(postToAdd);
+            myPostIds.push(newId);
+            closePostModal();
 
-        if (error) {
-            console.error('保存エラー:', error);
-            alert('投稿に失敗しました。もう一度試してください。');
-            return;
-        }
-
-        // 成功したら画面を閉じてリロード
-        closePostModal();
-        alert('投稿が完了しました！');
-        location.reload(); // ページを再読み込みして最新データを表示
+            setGender(postToAdd.gender);
+            selectedAge = postToAdd.category;
+            selectedSubCategory = postToAdd.sub_categories[0];
+            
+            renderAgeTabs();
+            renderSubCategories();
+            renderTimeline();
         }
 
         // --- 削除モーダル処理 ---
