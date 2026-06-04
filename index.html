@@ -333,11 +333,6 @@
             ]
         };
 
-            // --- Supabaseの設定 ---
-                const supabaseUrl = 'https://umvsjuwxgbncuouhfhzo.supabase.co/rest/v1/';
-                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtdnNqdXd4Z2JuY3VvdWhmaHpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyOTMwODMsImV4cCI6MjA5NTg2OTA4M30.RmYTCVnkayY8vfxV4OvgChjUUSju_nlsS-r7BRunCo0';
-                const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
         let posts = [
             {
                 id: 7, isExample: true, gender: 'girl', category: 'infant', sub_categories: ['work'], custom_tag: '', author_name: '匿名パパ', child_status: '未記入', title: '例：育休をとって、自分自身も成長した話',
@@ -634,6 +629,11 @@
         async function submitPost(e) {
             e.preventDefault();
     
+            // --- Supabaseの設定 ---
+                const supabaseUrl = 'https://umvsjuwxgbncuouhfhzo.supabase.co/rest/v1/';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtdnNqdXd4Z2JuY3VvdWhmaHpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyOTMwODMsImV4cCI6MjA5NTg2OTA4M30.RmYTCVnkayY8vfxV4OvgChjUUSju_nlsS-r7BRunCo0';
+                const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
             // (入力値の取得部分はそのまま使います...)
             const checkboxes = document.getElementsByName('new-subcategories');
             const selectedSubCats = [];
