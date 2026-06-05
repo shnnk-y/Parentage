@@ -671,7 +671,8 @@
             // Supabaseに保存！
             const { data, error } = await supabaseClient
                 .from('posts')
-                .insert([postData]);
+                .insert([postData])
+                .select();
 
             if (error) {
                 console.error('保存エラー:', error);
