@@ -356,6 +356,7 @@
         });
 
         async function initApp() {
+            myPostIds = JSON.parse(localStorage.getItem('myPostIds') || '[]');
             renderAgeTabs();
             renderSubCategories();
 
@@ -679,6 +680,9 @@
             }
 
             // 成功したら画面を閉じてリロード
+            const savedIds = JSON.parse(localStorage.getItem('myPostIds')||'[]');
+            savedIds.push(data[0].id);
+            localStorage.setItem('myPostIds', JSON.stringify(savedIds));
             closePostModal();
             alert('投稿が完了しました！');
             location.reload(); // ページを再読み込みして最新データを表示
@@ -695,10 +699,12 @@
             document.getElementById('delete-modal').classList.add('hidden');
         }
 
-        function executeDeletePost() {
+        async function executeDeletePost() {
             if (postToDelete) {
+                await supabaseClient.from('posts').delete().eq('id', postToDelete);
                 posts = posts.filter(p => p.id !== postToDelete);
                 myPostIds = myPostIds.filter(id => id !== postToDelete);
+                localStorage.setItem('myPostIds', JSON.stringify(myPostIds));
                 closeDeleteModal();
                 renderTimeline();
             }
