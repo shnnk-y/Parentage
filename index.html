@@ -223,9 +223,9 @@
 
     <script>
         // --- Supabaseの設定 ---
-                const supabaseUrl = 'https://umvsjuwxgbncuouhfhzo.supabase.co/rest/v1/';
+                const supabaseUrl = 'https://umvsjuwxgbncuouhfhzo.supabase.co';
                 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtdnNqdXd4Z2JuY3VvdWhmaHpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyOTMwODMsImV4cCI6MjA5NTg2OTA4M30.RmYTCVnkayY8vfxV4OvgChjUUSju_nlsS-r7BRunCo0';
-                const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+                const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // --- セキュリティ対策：HTMLエスケープ関数 ---
         function escapeHTML(str) {
@@ -657,7 +657,7 @@
             };
 
             // Supabaseに保存！
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('posts')
                 .insert([postData]);
 
