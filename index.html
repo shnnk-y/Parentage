@@ -355,9 +355,20 @@
             initApp();
         });
 
-        function initApp() {
+        async function initApp() {
             renderAgeTabs();
             renderSubCategories();
+
+            // Supabaseから投稿を取得して posts に追加
+            const { data, error } = await supabaseClient
+                .from('posts')
+                .select('*')
+                .order('id', { ascending: false });
+
+            if (!error && data) {
+                posts = [...posts.filter(p => p.isExample), ...data]; // サンプルデータ＋Supabaseデータ
+            }
+
             renderTimeline();
         }
 
