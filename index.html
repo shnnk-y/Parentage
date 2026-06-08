@@ -496,7 +496,7 @@
                 const safeContent = escapeHTML(post.content);
 
                 const borderClass = post.gender === 'boy' ? 'bg-gradient-to-r from-sky-400 to-blue-500' : (post.gender === 'girl' ? 'bg-gradient-to-r from-rose-300 to-pink-400' : 'bg-gradient-to-r from-amber-400 to-amber-500');
-                const isMyPost = true;
+                const isMyPost = myPostIds.includes(post.id);
                 const deleteBtnHtml = isMyPost ? `<button onclick="openDeleteModal(${post.id})" class="absolute top-3 right-3 text-stone-300 hover:text-red-500 p-2"><i class="fa-regular fa-trash-can text-sm"></i></button>` : '';
 
                 let tagsHtml = '';
