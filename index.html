@@ -91,7 +91,7 @@
             <p class="text-[11px] font-bold text-stone-500 mb-2.5 px-1 flex items-center justify-between">
                 <span class="flex items-center gap-1">
                     <i class="fa-solid fa-tags text-amber-600"></i>
-                    <span id="theme-section-label">共通・総合テーマ:</span>
+                    <span id="theme-section-label">共通・総合テーマ：</span>
                 </span>
                 <span id="theme-warning-text" class="text-[10px] text-amber-700/80 font-normal">※年齢層を選ぶと、さらに専門的なテーマが現れます</span>
             </p>
@@ -159,7 +159,7 @@
 
                         <div id="new-custom-tag-container" class="bg-amber-50/40 p-3 rounded-xl border border-amber-100/50 hidden">
                             <label class="block text-xs font-bold text-stone-600 mb-1">「その他」の具体的なテーマ（任意）</label>
-                            <input type="text" id="new-custom-tag-input" placeholder="例: 夫婦関係、不登校、お小遣い など" class="w-full text-xs border border-stone-200 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
+                            <input type="text" id="new-custom-tag-input" placeholder="例：夫婦関係、不登校、お小遣い など" class="w-full text-xs border border-stone-200 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
@@ -534,9 +534,9 @@
                         </div>
                         <div class="flex items-center justify-between pt-3.5 border-t border-stone-100 text-xs text-stone-500">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                                <span><i class="fa-solid fa-user-check text-amber-600/70 mr-1"></i>投稿: <strong class="text-stone-700">${safeAuthor}</strong></span>
+                                <span><i class="fa-solid fa-user-check text-amber-600/70 mr-1"></i>投稿：<strong class="text-stone-700">${safeAuthor}</strong></span>
                                 <span class="text-stone-300 hidden sm:inline">|</span>
-                                <span>現在の状況: <strong class="text-stone-700">${safeStatus || '未記入'}</strong></span>
+                                <span>現在の状況：<strong class="text-stone-700">${safeStatus || '未記入'}</strong></span>
                             </div>
                             <button onclick="toggleThank(${post.id})" class="flex items-center gap-1.5 py-1.5 px-3 border rounded-full ${thankBtnClass}">
                                 <i class="${post.hasThanked ? 'fa-solid fa-heart fa-beat' : 'fa-solid fa-heart'}"></i>
@@ -675,7 +675,7 @@
                 .select();
 
             if (error) {
-                console.error('保存エラー:', error);
+                console.error('保存エラー：', error);
                 alert('投稿に失敗しました。もう一度試してください。');
                 return;
             }
